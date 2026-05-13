@@ -3616,3 +3616,74 @@ Error: No existing credentials found. Please run `vercel login` or pass "--token
 ---
 
 *最后更新: 2026-05-14（第二十三期：部署阻断诊断 + 方向E深度验证）*
+
+
+---
+
+## 二十五、第二十五期（2026-05-14 凌晨）：Railway.toml配置完成 + GitHub已push
+
+### 一、当前状态确认
+
+**代码已就绪：**
+- ✅ `web_app.py` — FastAPI Web服务，497行
+- ✅ `data_cleaner.py` — 核心清洗逻辑，288行  
+- ✅ `check_deps.py` — 依赖检查脚本
+- ✅ `vercel.json` — Vercel配置
+- ✅ `railway.toml` — Railway配置（**新增，已push**）
+- ✅ GitHub仓库：`https://github.com/hapcaper/ai-data-cleaner`
+- ✅ **所有代码已push到origin**
+
+**API测试结果（2026-05-14）：**
+```
+Status: 200 | Quality Score: 83.3/100 | Issues found: 5
+```
+
+### 二、部署平台最终确认
+
+| 平台 | CLI | OAuth需求 | 结论 |
+|------|-----|-----------|------|
+| Vercel | npx vercel ✅ | ❌ 首次需浏览器授权 | cron不可用 |
+| Railway | ❌ CLI不存在 | ❌ 需浏览器OAuth | cron不可用 |
+| **Railway Dashboard** | ✅ GitHub连接 | ⚠️ **仅首次需要** | **唯一可行路径** |
+
+### 三、Railway.toml（已创建并push）
+
+```toml
+[build]
+builder = "python"
+pythonVersion = "3.11"
+
+[deploy]
+startCommand = "python web_app.py"
+healthCheckPath = "/"
+port = 18765
+
+[settings]
+idleTimeoutEnabled = false
+```
+
+### 四、Dify生态研究（新发现）
+
+**Dify: 141k stars, 22k forks, 6小时前最新提交**
+- FastGPT: 28k stars, 7k forks
+- 两者都需要~33-47个Docker容器，部署复杂度极高
+- 绝大多数企业没有能力自部署 → 部署服务市场真实存在但壁垒高
+
+### 五、给李梓浩的唯一任务
+
+**5分钟完成Railway部署（一次性人工操作）：**
+
+```
+1. 打开 https://railway.app/dashboard
+2. Login with GitHub
+3. New Project → Deploy from GitHub → 选择 hapcaper/ai-data-cleaner
+4. Start Command: python web_app.py
+5. Port: 18765
+6. Deploy → 获得 xxx.railway.app URL
+```
+
+### 六、结论
+
+**24期研究 → 唯一的阻断点是Railway OAuth授权（5分钟）**
+
+*第二十五期更新: 2026-05-14*
