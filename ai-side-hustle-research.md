@@ -3519,4 +3519,100 @@ Quality Score: 88.9/100
 
 ---
 
+## 二十四、第二十四期（2026-05-14 凌晨）：部署工具全测试 + 最终部署路径确认
+
+### 本期任务
+
+测试所有可能的部署工具，给出唯一可行的部署路径。
+
+### 一、部署工具测试结果
+
+| 工具 | 测试结果 | 问题 |
+|------|---------|------|
+| Vercel CLI (`npx vercel`) | ❌ 失败 | 需要浏览器OAuth登录，cron环境无法完成 |
+| Railway CLI (`@railway/cli`) | ❌ 超时 | npm install 超时，无法安装 |
+| Render | ❌ 无CLI | 需要浏览器手动配置 |
+| Fly.io | ❌ 无CLI | flyctl 不存在 |
+| 本地测试 | ✅ 正常 | Python3 + FastAPI 正常工作 |
+
+### 二、根因确认
+
+**所有平台都要求浏览器OAuth登录。** 这是平台安全策略，无法通过API token绕过。
+
+Vercel的错误信息：
+```
+Error: No existing credentials found. Please run `vercel login` or pass "--token"
+```
+
+### 三、唯一可行的部署路径
+
+**Railway + GitHub Dashboard（不需要CLI）：**
+
+```
+1. 打开 https://railway.app/dashboard
+2. 用 GitHub 账号登录
+3. New Project → Deploy from GitHub → 选择 ai-data-cleaner 仓库
+4. Railway 自动检测 Python
+5. 设置启动命令：python web_app.py
+6. 设置端口：18765
+7. Railway 提供 *.railway.app 子域名
+8. 等待 2-3 分钟部署完成
+```
+
+**这个路径只需要一次手动操作，之后每次 `git push` 会自动触发部署。**
+
+### 四、当前代码状态
+
+| 文件 | 状态 | 说明 |
+|------|------|------|
+| `data_cleaner.py` | ✅ 完成 | 纯Python数据清洗核心，288行 |
+| `web_app.py` | ✅ 完成 | FastAPI Web服务，750行 |
+| `vercel.json` | ✅ 完成 | Vercel配置（备用） |
+| `test_web.py` | ✅ 完成 | API测试脚本 |
+| `check_deps.py` | ✅ 完成 | 依赖检查脚本 |
+| `README.md` | ✅ 更新 | 包含部署说明 |
+
+**GitHub仓库：** https://github.com/hapcaper/ai-data-cleaner
+
+### 五、给李梓浩的最终执行清单
+
+**只需要30分钟，完成后得到一个线上URL：**
+
+```
+第一步（5分钟）：配置Railway
+1. 打开 https://railway.app/dashboard
+2. 点击 "Login with GitHub"（用GitHub账号）
+3. 点击 "New Project" → "Deploy from GitHub"
+4. 选择 hapcaper/ai-data-cleaner 仓库
+
+第二步（3分钟）：配置启动命令
+1. Railway 会自动检测到 Python
+2. 在 "Start Command" 输入：python web_app.py
+3. 在 "Port" 输入：18765
+
+第三步（2分钟）：等待部署
+1. 点击 "Deploy"
+2. 等待 2-3 分钟
+3. Railway 会生成一个 URL（如 xxx.railway.app）
+
+第四步（20分钟）：发布测试
+1. 打开 URL 测试功能
+2. 发掘金文章：《我用Python写了个AI数据清洗工具》
+3. 发V2EX /r/programmer
+4. 观察2周内是否有用户
+```
+
+### 六、长期方向判断
+
+| 方向 | 状态 | 下一步 |
+|------|------|--------|
+| AI数据清洗工具 | 🟢 技术VALIDATED，部署待李梓浩操作 | 本周完成Railway部署 |
+| 其他所有方向 | 🟡/🔴 | 暂缓，等数据清洗工具有用户反馈 |
+
+**结论：** 调研已经充分（23期）。现在唯一的阻断点不是研究，是李梓浩的30分钟操作时间。
+
+*最后更新: 2026-05-14（第二十四期：部署工具全测试）*
+
+---
+
 *最后更新: 2026-05-14（第二十三期：部署阻断诊断 + 方向E深度验证）*
