@@ -1,7 +1,7 @@
 # AI 副业研究笔记
 > 创业伙伴联合研究：李梓浩（Java后端/VIPKID）+ Hermes AI
 > 启动日期：2025-05-13
-|> 最后更新：2026-05-14（第二十八期：代码已推送GitHub，部署仍需人工OAuth；方向B/E深度调研）
+|> 最后更新：2026-05-14（第二十九期：render-cli已安装，Railway Dashboard是唯一可行路径，render deploy待验证）
 
 ---
 
