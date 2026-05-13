@@ -1,0 +1,11 @@
+[build]
+builder = "python"
+pythonVersion = "3.11"
+
+[deploy]
+startCommand = "python web_app.py"
+healthCheckPath = "/"
+port = 18765
+
+[settings]
+idleTimeoutEnabled = false
